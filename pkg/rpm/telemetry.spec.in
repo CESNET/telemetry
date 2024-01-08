@@ -1,0 +1,31 @@
+Name:          telemetry
+Version:       @VERSION@
+Release:       @RELEASE@%{?dist}
+Summary:       A versatile library for managing telemetry data.
+
+License:       BSD
+Source0:       %{name}-%{version}.tar.gz
+
+BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
+BuildRequires: gcc-c++ >= 8
+BuildRequires: make
+BuildRequires: cmake >= 3.12
+
+%description
+The package contains a telemetry library for managing
+telemetry data in your program.
+
+%prep
+%autosetup
+
+%build
+%cmake -DCMAKE_BUILD_TYPE=Release
+%cmake_build
+
+%install
+%cmake_install
+
+%files
+%license LICENSE
+
+%changelog
