@@ -1,5 +1,6 @@
 list(APPEND TELEMETRY_SOURCE_FILES
 	content.cpp
+	node.cpp
 )
 
 if (TELEMETRY_BUILD_SHARED)
