@@ -1,6 +1,7 @@
 add_library(telemetry SHARED
 	content.cpp
 	node.cpp
+	file.cpp
 )
 
 target_include_directories(telemetry PUBLIC ${CMAKE_SOURCE_DIR}/include)
