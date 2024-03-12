@@ -1,0 +1,37 @@
+name: build
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: ${{ inputs.os }}
+    steps:
+    - name: Install dependencies
+      run: |
+        dnf install -y make gcc-c++ cmake3 git rpm-build fuse3-devel
+    - name: Check out repository code
+      uses: actions/checkout@v4
+    - name: Mark github workspace as safe
+      run: git config --system --add safe.directory $PWD
+    - name: make
+      run: make
+    - name: make rpm
+      run: make rpm
+    - name: make install
+      run: make install
+    - name: extract artifact name
+      run: |
+        OS=${{ inputs.os }}
+        echo "artifactName=$(echo ${OS/:/}-rpm)" >> $GITHUB_ENV
+    - name: upload RPM artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.artifactName }}
+        path: ./build/pkg/rpm/rpmbuild/RPMS/x86_64
+        retention-days: 1
