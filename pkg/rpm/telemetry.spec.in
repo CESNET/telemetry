@@ -27,5 +27,7 @@ telemetry data in your program.
 
 %files
 %license LICENSE
+%{_libdir}/libtelemetry.so
+%{_includedir}/telemetry/*.hpp
 
 %changelog
