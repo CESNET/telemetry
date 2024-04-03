@@ -6,6 +6,7 @@ list(APPEND TELEMETRY_SOURCE_FILES
 	holder.cpp
 	utility.cpp
 	aggregator/aggMethod.cpp
+	aggregator/aggSum.cpp
 )
 
 if (TELEMETRY_BUILD_SHARED)
