@@ -2,6 +2,7 @@ list(APPEND TELEMETRY_SOURCE_FILES
 	content.cpp
 	node.cpp
 	file.cpp
+	directory.cpp
 )
 
 if (TELEMETRY_BUILD_SHARED)
