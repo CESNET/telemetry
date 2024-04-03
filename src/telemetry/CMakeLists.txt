@@ -3,6 +3,7 @@ list(APPEND TELEMETRY_SOURCE_FILES
 	node.cpp
 	file.cpp
 	directory.cpp
+	holder.cpp
 )
 
 if (TELEMETRY_BUILD_SHARED)
