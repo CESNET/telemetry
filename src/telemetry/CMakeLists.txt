@@ -9,6 +9,7 @@ list(APPEND TELEMETRY_SOURCE_FILES
 	aggregator/aggSum.cpp
 	aggregator/aggAvg.cpp
 	aggregator/aggJoin.cpp
+	aggregator/aggMethodFactory.cpp
 )
 
 if (TELEMETRY_BUILD_SHARED)
