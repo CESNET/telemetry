@@ -4,6 +4,7 @@ list(APPEND TELEMETRY_SOURCE_FILES
 	file.cpp
 	directory.cpp
 	holder.cpp
+	utility.cpp
 )
 
 if (TELEMETRY_BUILD_SHARED)
