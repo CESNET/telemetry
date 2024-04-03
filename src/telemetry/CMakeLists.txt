@@ -5,6 +5,7 @@ list(APPEND TELEMETRY_SOURCE_FILES
 	directory.cpp
 	holder.cpp
 	utility.cpp
+	aggFile.cpp
 	aggregator/aggMethod.cpp
 	aggregator/aggSum.cpp
 	aggregator/aggAvg.cpp

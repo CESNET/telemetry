@@ -85,7 +85,10 @@ private:
 
 	// Allow directory to call File constructor
 	friend class Directory;
-	// Can be created only from a directory. Must be always created as a shared_ptr.
+
+protected:
+	// Can be created only from a directory or a derived class.
+	// Must be always created as a shared_ptr.
 	File(const std::shared_ptr<Node>& parent, std::string_view name, FileOps ops);
 };
 

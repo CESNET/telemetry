@@ -61,6 +61,25 @@ std::shared_ptr<File> Directory::addFile(std::string_view name, FileOps ops)
 	return newFile;
 }
 
+std::shared_ptr<AggregatedFile> Directory::addAggFile(
+	std::string_view name,
+	const std::string& aggFilesPattern,
+	const std::vector<AggOperation>& aggOps)
+{
+	const std::lock_guard lock(getMutex());
+	const std::shared_ptr<Node> entry = getEntryLocked(name);
+
+	if (entry != nullptr) {
+		throwEntryAlreadyExists(name);
+	}
+
+	auto newFile = std::shared_ptr<AggregatedFile>(
+		new AggregatedFile(shared_from_this(), name, aggFilesPattern, aggOps));
+
+	addEntryLocked(newFile);
+	return newFile;
+}
+
 std::vector<std::string> Directory::listEntries()
 {
 	std::vector<std::string> result;

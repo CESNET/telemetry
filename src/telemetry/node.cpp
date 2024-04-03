@@ -14,8 +14,8 @@
 namespace telemetry {
 
 Node::Node(std::shared_ptr<Node> parent, std::string_view name)
-	: m_name(name)
-	, m_parent(std::move(parent))
+	: m_parent(std::move(parent))
+	, m_name(name)
 {
 	if (m_parent == nullptr) {
 		throwTelemetryException("parent cannot be nullptr");

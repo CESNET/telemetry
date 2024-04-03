@@ -63,10 +63,12 @@ public:
 	/** @brief Get full path from the root to this node (including this node name). */
 	std::string getFullPath();
 
+protected:
+	std::shared_ptr<Node> m_parent;
+
 private:
 	std::mutex m_mutex;
 	std::string m_name;
-	std::shared_ptr<Node> m_parent;
 
 	void checkName(std::string_view name);
 	[[noreturn]] void throwTelemetryException(std::string_view err);

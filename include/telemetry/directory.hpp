@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "aggFile.hpp"
 #include "file.hpp"
 #include "node.hpp"
 
@@ -63,6 +64,35 @@ public:
 	 * @throw TelemetryException if there is already a file or directory with the same name.
 	 */
 	[[nodiscard]] std::shared_ptr<File> addFile(std::string_view name, FileOps ops);
+
+	/**
+	 * @brief Add an aggregated file to the directory
+	 *
+	 * This function adds a new aggregated file to the directory, which aggregates data from
+	 * multiple files matching a specified pattern using the provided aggregation operations.
+	 *
+	 * An aggregated file combines data from multiple source files into a single cohesive dataset
+	 * according to the specified aggregation operations. These operations define how data from
+	 * individual files should be combined, such as computing averages, sums, or joining values.
+	 *
+	 * The aggregation file pattern specifies a regular expression pattern used to match files
+	 * within the directory. Only files whose names match this pattern will be included in the
+	 * aggregation process.
+	 *
+	 * Syntax of regex is default std::regex()
+	 *
+	 * If an entry with the same name already exists in the directory, an exception is thrown.
+	 *
+	 * @param name              Name of the aggregated file
+	 * @param aggFilesPattern   Regular expression pattern used to match files for aggregation
+	 * @param aggOps            Vector of aggregation operations to be applied to the data
+	 * @return Shared pointer to the newly created aggregated file
+	 * @throw TelemetryException If an entry with the same name already exists in the directory
+	 */
+	[[nodiscard]] std::shared_ptr<AggregatedFile> addAggFile(
+		std::string_view name,
+		const std::string& aggFilesPattern,
+		const std::vector<AggOperation>& aggOps);
 
 	/**
 	 * @brief List all available entries of the directory.
