@@ -33,5 +33,7 @@ telemetry data in your program.
 %{_libdir}/libtelemetry.so
 %{_includedir}/telemetry.hpp
 %{_includedir}/telemetry/*.hpp
+%{_libdir}/libappFs.so
+%{_includedir}/appFs.hpp
 
 %changelog
