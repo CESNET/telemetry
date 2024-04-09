@@ -26,9 +26,11 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -ggdb3")
 # This option ensures that standard include header paths are explicitly added
 # to the generated compile_commands.json file.
 # clang-tidy doesn't seem to find standard include headers otherwise.
-if(CMAKE_EXPORT_COMPILE_COMMANDS)
+if (CMAKE_EXPORT_COMPILE_COMMANDS)
 	set(CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
 endif()
+
+include(cmake/dependencies.cmake)
 
 add_subdirectory(src)
 
