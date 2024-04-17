@@ -139,3 +139,7 @@ std::string contentToString(const Content& content)
 }
 
 } // namespace telemetry
+
+#ifdef TELEMETRY_ENABLE_TESTS
+#include "tests/testContent.cpp"
+#endif
