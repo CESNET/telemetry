@@ -68,3 +68,7 @@ void File::disable()
 }
 
 } // namespace telemetry
+
+#ifdef TELEMETRY_ENABLE_TESTS
+#include "tests/testFile.cpp"
+#endif
