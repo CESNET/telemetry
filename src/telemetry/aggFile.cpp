@@ -163,3 +163,7 @@ AggregatedFile::AggregatedFile(
 }
 
 } // namespace telemetry
+
+#ifdef TELEMETRY_ENABLE_TESTS
+#include "tests/testAggFile.cpp"
+#endif
