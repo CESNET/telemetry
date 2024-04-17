@@ -1,0 +1,23 @@
+name: make-test
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+
+jobs:
+  make-test:
+    runs-on: ubuntu-latest
+    container: ${{ inputs.os }}
+    steps:
+    - name: Install dependencies
+      run: |
+        dnf install -y make gcc-c++ cmake3 git rpm-build fuse3-devel
+    - name: Check out repository code
+      uses: actions/checkout@v4
+    - name: Mark github workspace as safe
+      run: git config --system --add safe.directory $PWD
+    - name: make test
+      run: make test

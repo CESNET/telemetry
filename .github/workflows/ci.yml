@@ -8,7 +8,7 @@ jobs:
   build-os-matrix:
     needs: check
     runs-on: ubuntu-latest
-    outputs: 
+    outputs:
       os: ${{ steps.os.outputs.os }}
     steps:
       - name: Build OS Array
@@ -36,5 +36,13 @@ jobs:
       matrix:
         os: ${{ fromJSON(needs.build-os-matrix.outputs.os) }}
     uses: ./.github/workflows/rpm-test.yml
+    with:
+      os: ${{ matrix.os }}
+  make-test:
+    needs: [build-os-matrix, build]
+    strategy:
+      matrix:
+        os: ${{ fromJSON(needs.build-os-matrix.outputs.os) }}
+    uses: ./.github/workflows/make-test.yml
     with:
       os: ${{ matrix.os }}
