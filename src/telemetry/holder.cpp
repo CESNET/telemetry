@@ -34,3 +34,7 @@ void Holder::disableFiles()
 }
 
 } // namespace telemetry
+
+#ifdef TELEMETRY_ENABLE_TESTS
+#include "tests/testHolder.cpp"
+#endif
