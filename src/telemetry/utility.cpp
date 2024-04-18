@@ -78,3 +78,7 @@ bool isRootDirectory(const std::string& path) noexcept
 }
 
 } // namespace telemetry::utils
+
+#ifdef TELEMETRY_ENABLE_TESTS
+#include "tests/testUtility.cpp"
+#endif
