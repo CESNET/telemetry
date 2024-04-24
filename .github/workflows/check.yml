@@ -1,0 +1,38 @@
+name: check
+
+on: [workflow_call]
+
+jobs:
+  clang-checks:
+    runs-on: ubuntu-latest
+    container: oraclelinux:9
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+    - name: Install dependencies
+      run: |
+        dnf install -y make gcc-c++ clang clang-tools-extra cmake3 git rpm-build fuse3-devel
+    - name: make format-check
+      run: make format
+    - name: make tidy-check
+      run: make tidy
+
+  editor-config:
+    runs-on: ubuntu-latest
+    container: mstruebing/editorconfig-checker
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+    - name: Check editorconfig
+      run: ec --exclude .git
+
+  include-orders:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+    - name: Run include-order-checker
+      run: "! grep -r -A 10 '#include <' src/ include/ | grep -B 10 '#include \"'"
+
+  cppcheck:
+    uses: ./.github/workflows/cppcheck.yml

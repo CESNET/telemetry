@@ -1,0 +1,27 @@
+name: cppcheck-action-test
+
+on: [workflow_call]
+
+jobs:
+  build:
+    name: cppcheck-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: cppcheck
+        uses: SiskaPavel/cppcheck-action@main
+        with:
+          std: c++17
+          inline_suppression: enable
+          output_file: 'cppcheck_report.txt'
+          enable: warning,performance,portability,style,information
+          other_options: --error-exitcode=1
+      - name: Print cppcheck_report.txt
+        if: failure()
+        run: cat cppcheck_report.txt
+      - name: Upload Artifact
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cppcheck_report
+          path: 'cppcheck_report.txt'
