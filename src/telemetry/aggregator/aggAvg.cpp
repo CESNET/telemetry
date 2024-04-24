@@ -55,3 +55,7 @@ Content AggMethodAvg::aggregate(const std::vector<Content>& contents)
 }
 
 } // namespace telemetry
+
+#ifdef TELEMETRY_ENABLE_TESTS
+#include "tests/testAggAvg.cpp"
+#endif
