@@ -130,3 +130,7 @@ Content AggMethodSum::aggregate(const std::vector<Content>& contents)
 }
 
 } // namespace telemetry
+
+#ifdef TELEMETRY_ENABLE_TESTS
+#include "tests/testAggSum.cpp"
+#endif

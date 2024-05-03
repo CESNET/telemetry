@@ -46,3 +46,9 @@ tidy: all
 tidy-fix: all
 	$(RUN_CLANG_TIDY) -p build -quiet -fix -j $(shell nproc) $(SOURCE_DIR)
 
+.PHONY: test
+test: build
+	@cd build && $(CMAKE) $(CMAKE_ARGS) -DTELEMETRY_ENABLE_TESTS=ON ..
+	@$(MAKE) --no-print-directory -C build
+	@$(MAKE) test --no-print-directory -C build
+

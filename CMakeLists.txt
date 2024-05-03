@@ -13,6 +13,7 @@ include(cmake/installation.cmake)
 option(TELEMETRY_BUILD_SHARED "Build shared library" ON)
 option(TELEMETRY_PACKAGE_BUILDER "Enable RPM package builder (make rpm)" ON)
 option(TELEMETRY_INSTALL_TARGETS "Generate the install target" ON)
+option(TELEMETRY_ENABLE_TESTS "Build Unit tests (make test)" OFF)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -32,8 +33,16 @@ endif()
 
 include(cmake/dependencies.cmake)
 
+if (TELEMETRY_ENABLE_TESTS)
+	include(cmake/googletest.cmake)
+	include(GoogleTest)
+	enable_testing()
+endif()
+
 add_subdirectory(src)
 
 if (TELEMETRY_PACKAGE_BUILDER)
 	add_subdirectory(pkg)
 endif()
+
+

@@ -149,3 +149,7 @@ void Directory::throwEntryAlreadyExists(std::string_view name)
 }
 
 } // namespace telemetry
+
+#ifdef TELEMETRY_ENABLE_TESTS
+#include "tests/testDirectory.cpp"
+#endif
