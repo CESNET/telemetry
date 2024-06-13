@@ -6,15 +6,16 @@ Checks: '
   misc-*,
   -misc-no-recursion,
   -misc-use-anonymous-namespace,
+  -misc-include-cleaner,
   modernize-*,
   -modernize-use-trailing-return-type,
   performance-*,
+  -performance-avoid-endl,
   readability-*,
   concurrency-mt-unsafe,
   cppcoreguidelines-no-malloc,
   clang-analyzer-*,
   clang-diagnostic-*,
-  performance-*,
   readability-identifier-naming'
 FormatStyle: file
 WarningsAsErrors: '*'
