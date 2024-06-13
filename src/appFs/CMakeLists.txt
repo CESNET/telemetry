@@ -11,7 +11,7 @@ endif()
 add_library(telemetry::appFs ALIAS appFs)
 
 target_compile_definitions(appFs PUBLIC FUSE_USE_VERSION=30 _FILE_OFFSET_BITS=64)
-target_link_libraries(appFs PUBLIC telemetry PkgConfig::fuse)
+target_link_libraries(appFs PUBLIC telemetry PkgConfig::fuse stdc++fs)
 target_include_directories(appFs PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 if (TELEMETRY_INSTALL_TARGETS)

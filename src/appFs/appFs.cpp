@@ -9,6 +9,7 @@
 #include <appFs.hpp>
 
 #include <cstring>
+#include <filesystem>
 #include <iostream>
 #include <sstream>
 #include <sys/mount.h>
@@ -342,6 +343,19 @@ static void fillFuseArgs(struct fuse_args* fuseArgs)
 	fuse_opt_add_arg(fuseArgs, "attr_timeout=0");
 }
 
+static void createDirectories(const std::string& path)
+{
+	if (std::filesystem::exists(path)) {
+		return;
+	}
+
+	std::error_code errorCode;
+	if (!std::filesystem::create_directories(path, errorCode)) {
+		throw std::runtime_error(
+			"Failed to create directory (" + path + "). Error: " + errorCode.message());
+	}
+}
+
 class FuseArgs {
 public:
 	FuseArgs()
@@ -360,7 +374,8 @@ private:
 AppFsFuse::AppFsFuse(
 	std::shared_ptr<Directory> rootDirectory,
 	const std::string& mountPoint,
-	bool tryToUnmountOnStart)
+	bool tryToUnmountOnStart,
+	bool createMountPoint)
 {
 	m_rootDirectory = std::move(rootDirectory);
 	if (m_rootDirectory == nullptr) {
@@ -372,6 +387,10 @@ AppFsFuse::AppFsFuse(
 
 	struct fuse_operations fuseOps = {};
 	setFuseOperations(&fuseOps);
+
+	if (createMountPoint) {
+		createDirectories(mountPoint);
+	}
 
 	m_fuse.reset(fuse_new(fuseArgs.get(), &fuseOps, sizeof(fuseOps), (void*) &m_rootDirectory));
 	if (m_fuse == nullptr) {
