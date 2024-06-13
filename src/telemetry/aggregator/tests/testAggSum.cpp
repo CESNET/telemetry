@@ -166,7 +166,6 @@ TEST(AggSumTest, TestAggregate)
 		AggMethodSum aggMethodSum;
 		std::vector<Content> contents = {Scalar {true}, Scalar {5.0}};
 		EXPECT_THROW(aggMethodSum.aggregate(contents), TelemetryException);
-
 	}
 
 	// Test aggregation of incompatible scalar types (expect failure)

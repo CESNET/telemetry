@@ -14,6 +14,7 @@ option(TELEMETRY_BUILD_SHARED "Build shared library" ON)
 option(TELEMETRY_PACKAGE_BUILDER "Enable RPM package builder (make rpm)" ON)
 option(TELEMETRY_INSTALL_TARGETS "Generate the install target" ON)
 option(TELEMETRY_ENABLE_TESTS "Build Unit tests (make test)" OFF)
+option(TELEMETRY_BUILD_EXAMPLES "Build included example files (make example)" ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -32,6 +33,10 @@ if (CMAKE_EXPORT_COMPILE_COMMANDS)
 endif()
 
 include(cmake/dependencies.cmake)
+
+if (TELEMETRY_BUILD_EXAMPLES)
+	add_subdirectory(examples)
+endif()
 
 if (TELEMETRY_ENABLE_TESTS)
 	include(cmake/googletest.cmake)

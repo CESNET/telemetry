@@ -14,7 +14,7 @@ ifeq ($(RUN_CLANG_TIDY),)
 RUN_CLANG_TIDY := run-clang-tidy
 endif
 
-SOURCE_DIR = src/ include/
+SOURCE_DIR = src/ include/ examples/
 SOURCE_REGEX = '.*\.\(cpp\|hpp\)'
 
 .PHONY: all
@@ -52,3 +52,6 @@ test: build
 	@$(MAKE) --no-print-directory -C build
 	@$(MAKE) test --no-print-directory -C build
 
+example: build
+	@cd build && $(CMAKE) $(CMAKE_ARGS) -DTELEMETRY_BUILD_EXAMPLES=ON ..
+	@$(MAKE) --no-print-directory -C build
