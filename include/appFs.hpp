@@ -29,6 +29,8 @@ public:
 	 * @param rootDirectory A shared pointer to the telemetry root directory.
 	 * @param mountPoint The mount point directory path.
 	 * @param tryToUnmountOnStart Whether to attempt unmounting the mount point if it's already
+	 * mounted.
+	 * @param createMountPoint Whether to create the mount point directory if it doesn't exist.
 	 *
 	 * @throws std::runtime_error if rootDirectory is nullptr.
 	 * @throws std::runtime_error if setup and mount process fails.
@@ -36,7 +38,8 @@ public:
 	AppFsFuse(
 		std::shared_ptr<Directory> rootDirectory,
 		const std::string& mountPoint,
-		bool tryToUnmountOnStart = true);
+		bool tryToUnmountOnStart = true,
+		bool createMountPoint = false);
 
 	/**
 	 * @brief Creates a new thread to run the FUSE event loop.
