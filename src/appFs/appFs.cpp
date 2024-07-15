@@ -8,11 +8,10 @@
 
 #include <appFs.hpp>
 
+#include <cstdlib>
 #include <cstring>
 #include <filesystem>
 #include <iostream>
-#include <sstream>
-#include <sys/mount.h>
 #include <telemetry.hpp>
 #include <unistd.h>
 
@@ -211,9 +210,8 @@ static int readFile(
 		return -ENOTSUP;
 	}
 
-	// NOLINTBEGIN (performance-no-int-to-ptr, integer to pointer cast)
+	// NOLINTNEXTLINE (performance-no-int-to-ptr, integer to pointer cast)
 	std::string& cacheBuffer = *reinterpret_cast<std::string*>(fileInfo->fh);
-	// NOLINTEND
 
 	if (cacheBuffer.empty()) {
 		cacheBuffer = fileContentToString(file);
@@ -356,6 +354,23 @@ static void createDirectories(const std::string& path)
 	}
 }
 
+static void fuserUnmount(const std::string& mountPoint)
+{
+	const std::string whichCommand = "which fusermount3 > /dev/null 2>&1";
+
+	// NOLINTNEXTLINE (concurrency-mt-unsafe, std::system function is not thread safe)
+	const int ret = std::system(whichCommand.c_str());
+	if (ret != 0) {
+		std::cerr << "fusermount3 is not found. Unable to unmount '" + mountPoint << "'\n";
+		return;
+	}
+
+	const std::string fusermountCommand = "fusermount3 -u " + mountPoint + " > /dev/null 2>&1";
+
+	// NOLINTNEXTLINE (concurrency-mt-unsafe, std::system function is not thread safe)
+	(void) !std::system(fusermountCommand.c_str());
+}
+
 class FuseArgs {
 public:
 	FuseArgs()
@@ -389,19 +404,14 @@ AppFsFuse::AppFsFuse(
 	setFuseOperations(&fuseOps);
 
 	/**
-	 * If tryToUnmountOnStart is true, this code attempts to unmount the specified mount point.
-	 * This is necessary because if the application terminates unexpectedly, the filesystem
-	 * might remain mounted, which can prevent proper status checking and cause subsequent
-	 * attempts to mount it to fail. By forcing an unmount here, we ensure the mount point is
-	 * in a clean state before proceeding. If the unmount fails, an exception is thrown to
-	 * indicate that the cleanup process was unsuccessful.
+	 * If tryToUnmountOnStart is true, this code attempts to unmount the specified mount point using
+	 * fusermount3 binary. This is necessary because if the application terminates unexpectedly, the
+	 * filesystem might remain mounted, which can prevent proper status checking and cause
+	 * subsequent attempts to mount it to fail. By forcing an unmount here, we ensure the mount
+	 * point is in a clean state before proceeding.
 	 */
 	if (tryToUnmountOnStart) {
-		const int ret = umount2(mountPoint.c_str(), MNT_FORCE | UMOUNT_NOFOLLOW);
-		if (ret < 0 && errno != ENOENT) { // ENOENT means that No such directory exists
-			throw std::runtime_error(
-				"umount of " + mountPoint + " has failed. Error: " + std::to_string(errno));
-		}
+		fuserUnmount(mountPoint);
 	}
 
 	if (createMountPoint) {
