@@ -388,6 +388,22 @@ AppFsFuse::AppFsFuse(
 	struct fuse_operations fuseOps = {};
 	setFuseOperations(&fuseOps);
 
+	/**
+	 * If tryToUnmountOnStart is true, this code attempts to unmount the specified mount point.
+	 * This is necessary because if the application terminates unexpectedly, the filesystem
+	 * might remain mounted, which can prevent proper status checking and cause subsequent
+	 * attempts to mount it to fail. By forcing an unmount here, we ensure the mount point is
+	 * in a clean state before proceeding. If the unmount fails, an exception is thrown to
+	 * indicate that the cleanup process was unsuccessful.
+	 */
+	if (tryToUnmountOnStart) {
+		const int ret = umount2(mountPoint.c_str(), MNT_FORCE | UMOUNT_NOFOLLOW);
+		if (ret < 0 && errno != ENOENT) { // ENOENT means that No such directory exists
+			throw std::runtime_error(
+				"umount of " + mountPoint + " has failed. Error: " + std::to_string(errno));
+		}
+	}
+
 	if (createMountPoint) {
 		createDirectories(mountPoint);
 	}
@@ -397,19 +413,7 @@ AppFsFuse::AppFsFuse(
 		throw std::runtime_error("fuse_new() has failed.");
 	}
 
-	int ret = fuse_mount(m_fuse.get(), mountPoint.c_str());
-	if (ret < 0 && tryToUnmountOnStart) {
-		ret = umount2(mountPoint.c_str(), MNT_FORCE | UMOUNT_NOFOLLOW);
-		if (ret < 0) {
-			throw std::runtime_error("umount of " + mountPoint + " has failed.");
-		}
-
-		ret = fuse_mount(m_fuse.get(), mountPoint.c_str());
-		if (ret < 0) {
-			throw std::runtime_error("fuse_mount() has failed again.");
-		}
-	}
-
+	const int ret = fuse_mount(m_fuse.get(), mountPoint.c_str());
 	if (ret < 0) {
 		throw std::runtime_error("fuse_mount() has failed.");
 	}
