@@ -98,13 +98,16 @@ public:
 	 * @param name              Name of the aggregated file
 	 * @param aggFilesPattern   Regular expression pattern used to match files for aggregation
 	 * @param aggOps            Vector of aggregation operations to be applied to the data
+	 * @param patternRootDir    Root directory for the pattern (default is the parent directory)
+	 *
 	 * @return Shared pointer to the newly created aggregated file
 	 * @throw TelemetryException If an entry with the same name already exists in the directory
 	 */
 	[[nodiscard]] std::shared_ptr<AggregatedFile> addAggFile(
 		std::string_view name,
 		const std::string& aggFilesPattern,
-		const std::vector<AggOperation>& aggOps);
+		const std::vector<AggOperation>& aggOps,
+		std::shared_ptr<Directory> patternRootDir = nullptr);
 
 	/**
 	 * @brief List all available entries of the directory.

@@ -77,7 +77,8 @@ std::shared_ptr<File> Directory::addFile(std::string_view name, FileOps ops)
 std::shared_ptr<AggregatedFile> Directory::addAggFile(
 	std::string_view name,
 	const std::string& aggFilesPattern,
-	const std::vector<AggOperation>& aggOps)
+	const std::vector<AggOperation>& aggOps,
+	std::shared_ptr<Directory> patternRootDir)
 {
 	const std::lock_guard lock(getMutex());
 	const std::shared_ptr<Node> entry = getEntryLocked(name);
@@ -86,8 +87,12 @@ std::shared_ptr<AggregatedFile> Directory::addAggFile(
 		throwEntryAlreadyExists(name);
 	}
 
-	auto newFile = std::shared_ptr<AggregatedFile>(
-		new AggregatedFile(shared_from_this(), name, aggFilesPattern, aggOps));
+	auto newFile = std::shared_ptr<AggregatedFile>(new AggregatedFile(
+		shared_from_this(),
+		name,
+		aggFilesPattern,
+		aggOps,
+		std::move(patternRootDir)));
 
 	addEntryLocked(newFile);
 	return newFile;
