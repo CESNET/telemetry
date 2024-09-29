@@ -7,6 +7,7 @@
  */
 
 #include <telemetry/directory.hpp>
+#include <telemetry/utility.hpp>
 
 #include <mutex>
 
@@ -45,6 +46,18 @@ std::shared_ptr<Directory> Directory::addDir(std::string_view name)
 	auto newDir = std::shared_ptr<Directory>(new Directory(shared_from_this(), name));
 	addEntryLocked(newDir);
 	return newDir;
+}
+
+[[nodiscard]] std::shared_ptr<Directory> Directory::addDirs(std::string_view name)
+{
+	const auto paths = utils::parsePath(std::string(name));
+
+	std::shared_ptr<Directory> dir = std::dynamic_pointer_cast<Directory>(shared_from_this());
+	for (const auto& path : paths) {
+		dir = dir->addDir(path);
+	}
+
+	return dir;
 }
 
 std::shared_ptr<File> Directory::addFile(std::string_view name, FileOps ops)

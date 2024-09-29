@@ -56,6 +56,18 @@ public:
 	[[nodiscard]] std::shared_ptr<Directory> addDir(std::string_view name);
 
 	/**
+	 * @brief Add multiple subdirectories with the given @p name.
+	 *
+	 * The function is equivalent to calling addDir() for each path segment in the given
+	 * path. If a file with the same name already exists, the subdirectory cannot be created.
+	 *
+	 * @param name Path to the subdirectory
+	 * @return Shared pointer to the last subdirectory in the path
+	 * @throw TelemetryException if there is already a file with the same name.
+	 */
+	[[nodiscard]] std::shared_ptr<Directory> addDirs(std::string_view name);
+
+	/**
 	 * @brief Add a new file with the given @p name and @p ops I/O operations.
 	 *
 	 * @note
