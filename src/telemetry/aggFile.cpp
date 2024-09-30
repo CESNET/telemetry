@@ -123,6 +123,9 @@ Content AggregatedFile::read()
 	}
 
 	const auto files = getFilesMatchingPattern(m_filesRegexPattern, patternRootDir);
+	if (files.empty()) {
+		return content;
+	}
 
 	std::vector<Content> fileContents;
 	fileContents.reserve(files.size());
