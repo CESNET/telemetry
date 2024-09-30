@@ -282,4 +282,69 @@ TEST(TelemetryAggFile, read)
 	EXPECT_EQ(uint64_t(10), std::get<uint64_t>(ArrayValueJoin[2]));
 }
 
+TEST(TelemetryAggFile, readPatternDir)
+{
+	auto root = Directory::create();
+
+	auto dir = root->addDir("dir");
+	auto data0 = root->addDirs("dir/data_0/");
+	auto data1 = root->addDirs("dir/data_1/");
+	auto data2 = root->addDirs("dir/data_2/");
+
+	FileOps ops1;
+	ops1.read = []() { return Dict({{"packets", Scalar {uint64_t(1)}}}); };
+	FileOps ops2;
+	ops2.read = []() { return Dict({{"packets", Scalar {uint64_t(4)}}}); };
+	FileOps ops3;
+	ops3.read = []() { return Dict({{"packets", Scalar {uint64_t(10)}}}); };
+
+	auto file1 = data0->addFile("file1", ops1);
+	auto file2 = data1->addFile("file2", ops2);
+	auto file3 = data2->addFile("file3", ops3);
+
+	AggOperation aggOp1 {AggMethodType::SUM, "packets", "sumPackets"};
+	AggOperation aggOp2 {AggMethodType::AVG, "packets", "avgPackets"};
+	AggOperation aggOp3 {AggMethodType::JOIN, "packets", "joinPackets"};
+
+	auto aggFile
+		= root->addAggFile("aggFile", R"(data_\d+/file\d+)", {aggOp1, aggOp2, aggOp3}, dir);
+	const auto content = aggFile->read();
+
+	EXPECT_TRUE(std::holds_alternative<Dict>(content));
+
+	const Dict& dict = std::get<Dict>(content);
+	EXPECT_EQ(3, dict.size());
+
+	const Scalar& scalarValueSum = std::get<Scalar>(dict.at("sumPackets"));
+	EXPECT_EQ(uint64_t(15), std::get<uint64_t>(scalarValueSum));
+
+	const Scalar& scalarValueAvg = std::get<Scalar>(dict.at("avgPackets"));
+	EXPECT_EQ(5.00, std::get<double>(scalarValueAvg));
+
+	const Array& ArrayValueJoin = std::get<Array>(dict.at("joinPackets"));
+	EXPECT_EQ(3, ArrayValueJoin.size());
+	EXPECT_EQ(uint64_t(1), std::get<uint64_t>(ArrayValueJoin[0]));
+	EXPECT_EQ(uint64_t(4), std::get<uint64_t>(ArrayValueJoin[1]));
+	EXPECT_EQ(uint64_t(10), std::get<uint64_t>(ArrayValueJoin[2]));
+}
+
+TEST(TelemetryAggFile, readNoMatchingPattern)
+{
+	auto root = Directory::create();
+
+	auto data0 = root->addDirs("dir/data_0/");
+
+	FileOps ops1;
+	ops1.read = []() { return Dict({{"packets", Scalar {uint64_t(1)}}}); };
+
+	auto file1 = data0->addFile("file1", ops1);
+
+	AggOperation aggOp1 {AggMethodType::SUM, "packets", "sumPackets"};
+
+	auto aggFile = root->addAggFile("aggFile", R"(data_\d+/file\d+)", {aggOp1});
+	const auto content = aggFile->read();
+
+	EXPECT_TRUE(std::holds_alternative<Scalar>(content));
+}
+
 } // namespace telemetry

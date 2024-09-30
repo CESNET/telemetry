@@ -56,6 +56,18 @@ public:
 	[[nodiscard]] std::shared_ptr<Directory> addDir(std::string_view name);
 
 	/**
+	 * @brief Add multiple subdirectories with the given @p name.
+	 *
+	 * The function is equivalent to calling addDir() for each path segment in the given
+	 * path. If a file with the same name already exists, the subdirectory cannot be created.
+	 *
+	 * @param name Path to the subdirectory
+	 * @return Shared pointer to the last subdirectory in the path
+	 * @throw TelemetryException if there is already a file with the same name.
+	 */
+	[[nodiscard]] std::shared_ptr<Directory> addDirs(std::string_view name);
+
+	/**
 	 * @brief Add a new file with the given @p name and @p ops I/O operations.
 	 *
 	 * @note
@@ -86,13 +98,16 @@ public:
 	 * @param name              Name of the aggregated file
 	 * @param aggFilesPattern   Regular expression pattern used to match files for aggregation
 	 * @param aggOps            Vector of aggregation operations to be applied to the data
+	 * @param patternRootDir    Root directory for the pattern (default is the parent directory)
+	 *
 	 * @return Shared pointer to the newly created aggregated file
 	 * @throw TelemetryException If an entry with the same name already exists in the directory
 	 */
 	[[nodiscard]] std::shared_ptr<AggregatedFile> addAggFile(
 		std::string_view name,
 		const std::string& aggFilesPattern,
-		const std::vector<AggOperation>& aggOps);
+		const std::vector<AggOperation>& aggOps,
+		std::shared_ptr<Directory> patternRootDir = nullptr);
 
 	/**
 	 * @brief List all available entries of the directory.

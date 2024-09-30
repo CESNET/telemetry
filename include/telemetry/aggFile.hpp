@@ -56,12 +56,14 @@ private:
 		const std::shared_ptr<Node>& parent,
 		std::string_view name,
 		std::string aggFilesPattern,
-		const std::vector<AggOperation>& ops);
+		const std::vector<AggOperation>& ops,
+		std::shared_ptr<Directory> patternRootDir = nullptr);
 
 	FileOps getOps();
 
 	const std::string m_filesRegexPattern;
 
+	std::shared_ptr<Directory> m_patternRootDir;
 	std::vector<std::string> m_paths;
 	std::vector<std::unique_ptr<AggMethod>> m_aggMethods;
 };
