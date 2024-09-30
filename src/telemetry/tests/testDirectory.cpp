@@ -41,6 +41,26 @@ TEST(TelemetryDirectory, addDir)
 }
 
 /**
+ * @test Test creating telemetry directories recursively.
+ */
+TEST(TelemetryDirectory, addDirs)
+{
+	auto root = Directory::create();
+
+	auto test = root->addDirs("info/app/test");
+	EXPECT_EQ("test", test->getName());
+	EXPECT_EQ("/info/app/test", test->getFullPath());
+
+	auto app = test->addDirs("app");
+	EXPECT_EQ("app", app->getName());
+	EXPECT_EQ("/info/app/test/app", app->getFullPath());
+
+	auto rootDir = root->addDirs("");
+	EXPECT_EQ("", rootDir->getName());
+	EXPECT_EQ("/", rootDir->getFullPath());
+}
+
+/**
  * @test Test creating invalid telemetry directories.
  */
 TEST(TelemetryDirectory, addDirInvalid)
