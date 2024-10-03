@@ -1,6 +1,6 @@
 name: release package on copr
 
-on: 
+on:
   push:
     branches:
       - release
@@ -10,13 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     container: oraclelinux:8
     steps:
+    - name: Install git
+      run: dnf install -y git
+    - name: Check out repository code
+      uses: actions/checkout@v4
     - name: Install dependencies
+      uses: ./.github/actions/install-dependencies
+    - name: Install copr-cli
       run: |
         dnf install -y dnf-plugins-core epel-release
         dnf -y copr enable @CESNET/NEMEA
-        dnf install -y make gcc-c++ cmake3 git rpm-build fuse3-devel copr-cli
-    - name: Check out repository code
-      uses: actions/checkout@v4
+        dnf install -y copr-cli
     - name: Mark github workspace as safe
       run: git config --system --add safe.directory $PWD
     - name: make rpm
@@ -24,8 +28,8 @@ jobs:
     - name: Create copr config
       run: |
         mkdir ~/.config
-        echo "${{ secrets.COPR_CONFIG }}" >> ~/.config/copr 
-    - name: Upload SRPM to copr	
+        echo "${{ secrets.COPR_CONFIG }}" >> ~/.config/copr
+    - name: Upload SRPM to copr
       run: |
         copr build @CESNET/NEMEA build/pkg/rpm/rpmbuild/SRPMS/*
         copr build @CESNET/NEMEA-stable build/pkg/rpm/rpmbuild/SRPMS/*
