@@ -177,3 +177,7 @@ Content AggMethodMinMax::aggregate(const std::vector<Content>& contents)
 }
 
 } // namespace telemetry
+
+#ifdef TELEMETRY_ENABLE_TESTS
+#include "tests/testAggMinMax.cpp"
+#endif
