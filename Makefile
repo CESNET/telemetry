@@ -14,7 +14,11 @@ ifeq ($(RUN_CLANG_TIDY),)
 RUN_CLANG_TIDY := run-clang-tidy
 endif
 
-SOURCE_DIR = src/ include/
+SRC_DIR = "$(shell pwd)/src"
+INC_DIR = "$(shell pwd)/include"
+
+HEADE_FILTER = "$(SRC_DIR)|$(INC_DIR)"
+SOURCE_DIR = "$(SRC_DIR)" "$(INC_DIR)"
 SOURCE_REGEX = '.*\.\(cpp\|hpp\)'
 
 .PHONY: all
@@ -40,11 +44,11 @@ format-fix:
 
 .PHONY: tidy
 tidy: all
-	$(RUN_CLANG_TIDY) -p build -quiet -j $(shell nproc) $(SOURCE_DIR)
+	$(RUN_CLANG_TIDY) -p build -quiet -j $(shell nproc) -header-filter=$(HEADE_FILTER) $(SOURCE_DIR)
 
 .PHONY: tidy-fix
 tidy-fix: all
-	$(RUN_CLANG_TIDY) -p build -quiet -fix -j $(shell nproc) $(SOURCE_DIR)
+	$(RUN_CLANG_TIDY) -p build -quiet -fix -j $(shell nproc) -header-filter=$(HEADE_FILTER) $(SOURCE_DIR)
 
 .PHONY: test
 test: build
