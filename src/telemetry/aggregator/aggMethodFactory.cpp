@@ -8,6 +8,7 @@
 
 #include "aggAvg.hpp"
 #include "aggJoin.hpp"
+#include "aggMinMax.hpp"
 #include "aggSum.hpp"
 
 #include <telemetry/node.hpp>
@@ -25,6 +26,8 @@ std::unique_ptr<AggMethod> AggMethodFactory::createAggMethod(
 		aggMethod = std::make_unique<AggMethodSum>();
 	} else if (aggMethodType == AggMethodType::AVG) {
 		aggMethod = std::make_unique<AggMethodAvg>();
+	} else if (aggMethodType == AggMethodType::MIN || aggMethodType == AggMethodType::MAX) {
+		aggMethod = std::make_unique<AggMethodMinMax>(aggMethodType);
 	} else if (aggMethodType == AggMethodType::JOIN) {
 		aggMethod = std::make_unique<AggMethodJoin>();
 	} else {
