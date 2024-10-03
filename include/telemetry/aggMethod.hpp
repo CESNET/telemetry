@@ -36,7 +36,9 @@ enum class AggMethodType { AVG, SUM, JOIN };
  */
 struct AggOperation {
 	AggMethodType method; ///< Aggregation method
+	// NOLINTNEXTLINE(readability-redundant-string-init)
 	std::string dictFieldName = ""; ///< Name of the field in the dictionary
+	// NOLINTNEXTLINE(readability-redundant-string-init)
 	std::string dictResultName = ""; ///< Name of the field in the aggregated dictionary
 };
 
@@ -78,6 +80,9 @@ public:
 protected:
 	AggContent getAggContent(const Content& content, bool useDictResultName = false);
 
+	[[nodiscard]] std::string getDictResultName() const { return m_dictResultname; }
+
+private:
 	std::string m_dictFieldName;
 	std::string m_dictResultname;
 };

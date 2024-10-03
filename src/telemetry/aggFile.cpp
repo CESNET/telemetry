@@ -119,10 +119,10 @@ Content AggregatedFile::read()
 	if (m_patternRootDir) {
 		patternRootDir = m_patternRootDir;
 	} else {
-		patternRootDir = std::dynamic_pointer_cast<Directory>(m_parent);
+		patternRootDir = std::dynamic_pointer_cast<Directory>(getParent());
 	}
 
-	const auto files = getFilesMatchingPattern(m_filesRegexPattern, patternRootDir);
+	const auto files = getFilesMatchingPattern(M_FILES_REGEX_PATTERN, patternRootDir);
 	if (files.empty()) {
 		return content;
 	}
@@ -159,7 +159,7 @@ AggregatedFile::AggregatedFile(
 	const std::vector<AggOperation>& ops,
 	std::shared_ptr<Directory> patternRootDir)
 	: File(parent, name, getOps())
-	, m_filesRegexPattern(std::move(aggFilesPattern))
+	, M_FILES_REGEX_PATTERN(std::move(aggFilesPattern))
 	, m_patternRootDir(std::move(patternRootDir))
 {
 	validateAggOperations(ops);

@@ -69,7 +69,7 @@ static ScalarWithUnit getReferenceVariant(const std::vector<AggContent>& values)
 
 	if (std::holds_alternative<Array>(values.front())) {
 		for (const auto& value : values) {
-			const Array& array = std::get<Array>(value);
+			const auto& array = std::get<Array>(value);
 			if (!array.empty()) {
 				return {array.front(), ""};
 			}
@@ -102,7 +102,7 @@ static bool containsSameScalarAlternative(const std::vector<AggContent>& values)
 		return false;
 	}
 
-	size_t refIndex = refScalar.index();
+	const size_t refIndex = refScalar.index();
 
 	for (const auto& value : values) {
 		if (std::holds_alternative<Scalar>(value)) {
@@ -119,7 +119,7 @@ static bool containsSameScalarAlternative(const std::vector<AggContent>& values)
 				return false;
 			}
 		} else if (std::holds_alternative<Array>(value)) {
-			const Array& array = std::get<Array>(value);
+			const auto& array = std::get<Array>(value);
 			if (std::any_of(array.begin(), array.end(), [&](const auto& scalar) {
 					return scalar.index() != refIndex;
 				})) {

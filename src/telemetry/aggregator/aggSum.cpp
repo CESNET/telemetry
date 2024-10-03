@@ -99,8 +99,9 @@ static Content createDictContent(const std::string& dictKey, const ResultType& r
 
 Content AggMethodSum::createContent(const ResultType& result)
 {
-	if (!m_dictResultname.empty()) {
-		return createDictContent(m_dictResultname, result);
+	const auto dictResultName = getDictResultName();
+	if (!dictResultName.empty()) {
+		return createDictContent(dictResultName, result);
 	}
 
 	auto visitor = [&](const auto& arg) -> Content { return arg; };
