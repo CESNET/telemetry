@@ -32,7 +32,8 @@ static off_t getMaxFileSize(const std::shared_ptr<File>& file)
 	}
 
 	constexpr double requiredBlockEmptyCapacityMultiplier = 0.5;
-	constexpr size_t requiredCapacity = blockSize * requiredBlockEmptyCapacityMultiplier;
+	constexpr auto requiredCapacity = static_cast<size_t>(
+		static_cast<double>(blockSize) * requiredBlockEmptyCapacityMultiplier);
 
 	const size_t contentSize = fileContentToString(file).size();
 	const size_t blockSizeMultiplier = (contentSize + requiredCapacity) / blockSize + 1;
@@ -217,12 +218,14 @@ static int readFile(
 		cacheBuffer = fileContentToString(file);
 	}
 
-	if (static_cast<size_t>(offset) >= cacheBuffer.size()) {
+	const auto uOffset = static_cast<size_t>(offset);
+
+	if (uOffset >= cacheBuffer.size()) {
 		return 0;
 	}
 
-	const size_t length = std::min(size, cacheBuffer.size() - offset);
-	std::memcpy(buffer, cacheBuffer.c_str() + offset, length);
+	const size_t length = std::min(size, cacheBuffer.size() - uOffset);
+	std::memcpy(buffer, cacheBuffer.c_str() + uOffset, length);
 
 	return static_cast<int>(length);
 }
