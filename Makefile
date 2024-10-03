@@ -72,3 +72,6 @@ test: build
 	@$(MAKE) --no-print-directory -C build
 	@$(MAKE) test --no-print-directory -C build
 
+doxygen: build
+	@cd build && $(CMAKE) $(CMAKE_ARGS) -DTELEMETRY_ENABLE_DOC_DOXYGEN=ON ..
+	@$(MAKE) --no-print-directory -C build $@
