@@ -37,11 +37,15 @@ public:
 
 	/**
 	 * @brief Construct an empty root directory.
+	 * @return Shared pointer to the root directory
 	 */
 	[[nodiscard]] static std::shared_ptr<Directory> create();
 
 	/**
 	 * @brief Add/Get a subdirectory with the given @p name.
+	 *
+	 * @param name Name of the subdirectory
+	 * @return Shared pointer to the subdirectory
 	 *
 	 * If the subdirectory with the given name already exists, it will be returned.
 	 * Otherwise a new empty subdirectory will be created. If a file with the same name
@@ -69,6 +73,9 @@ public:
 
 	/**
 	 * @brief Add a new file with the given @p name and @p ops I/O operations.
+	 * @param name Name of the file
+	 * @param ops  I/O operations
+	 * @return Shared pointer to the newly created file
 	 *
 	 * @note
 	 *   The directory only holds a weak pointer to the file, so if the returned pointer

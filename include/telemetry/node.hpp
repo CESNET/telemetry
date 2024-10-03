@@ -21,8 +21,17 @@ namespace telemetry {
  */
 class TelemetryException : public std::runtime_error {
 public:
+	/**
+	 * @brief Construct a new exception with the given message.
+	 * @param whatArg Message of the exception.
+	 */
 	TelemetryException(const char* whatArg)
 		: std::runtime_error(whatArg) {};
+
+	/**
+	 * @brief Construct a new exception with the given message.
+	 * @param whatArg Message of the exception.
+	 */
 	TelemetryException(const std::string& whatArg)
 		: std::runtime_error(whatArg) {};
 };
@@ -56,11 +65,20 @@ public:
 	Node(Node&& other) = delete;
 	Node& operator=(Node&& other) = delete;
 
-	/** @brief Get reference to the internal mutex. */
+	/**
+	 * @brief Get reference to the internal mutex.
+	 * @return Reference to the internal mutex.
+	 */
 	std::mutex& getMutex() { return m_mutex; };
-	/** @brief Get the name of the node. */
+	/**
+	 * @brief Get the name of the node.
+	 * @return Name of the node.
+	 */
 	const std::string& getName() const noexcept { return m_name; };
-	/** @brief Get full path from the root to this node (including this node name). */
+	/**
+	 * @brief Get full path from the root to this node (including this node name).
+	 * @return Full path to this node.
+	 */
 	std::string getFullPath();
 
 protected:

@@ -34,6 +34,9 @@ using Content = std::variant<Scalar, ScalarWithUnit, Array, Dict>;
 
 /**
  * @brief Convert telemetry @p content to human readable string.
+ *
+ * @param content Telemetry content
+ * @return Human readable string
  */
 std::string contentToString(const Content& content);
 
