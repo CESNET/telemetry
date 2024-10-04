@@ -64,9 +64,11 @@ public:
 	std::string getFullPath();
 
 protected:
-	std::shared_ptr<Node> m_parent;
+	std::shared_ptr<Node> getParent() { return m_parent; };
 
 private:
+	std::shared_ptr<Node> m_parent;
+
 	std::mutex m_mutex;
 	std::string m_name;
 

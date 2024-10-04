@@ -61,7 +61,7 @@ Content AggMethodJoin::aggregate(const std::vector<Content>& contents)
 	}
 
 	const auto& result = aggregateGatheredValues(values);
-	return createContent(m_dictResultname, result);
+	return createContent(getDictResultName(), result);
 }
 
 } // namespace telemetry

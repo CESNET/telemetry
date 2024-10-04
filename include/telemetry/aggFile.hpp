@@ -61,7 +61,7 @@ private:
 
 	FileOps getOps();
 
-	const std::string m_filesRegexPattern;
+	const std::string M_FILES_REGEX_PATTERN;
 
 	std::shared_ptr<Directory> m_patternRootDir;
 	std::vector<std::string> m_paths;
