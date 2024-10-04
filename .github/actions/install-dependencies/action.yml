@@ -1,0 +1,21 @@
+name: 'Install Dependencies'
+description: 'Install required dependencies in container'
+
+inputs:
+  clang-tools:
+    description: 'Install clang & clang-tools-extra'
+    required: false
+    default: false
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install build dependencies
+      shell: bash
+      run: |
+        dnf install -y make gcc-c++ cmake3 git rpm-build fuse3-devel
+    - name: Install clang tools
+      if: ${{ inputs.clang-tools == 'true' }}
+      shell: bash
+      run: |
+        dnf install -y clang clang-tools-extra

@@ -10,8 +10,9 @@ jobs:
     - name: Check out repository code
       uses: actions/checkout@v4
     - name: Install dependencies
-      run: |
-        dnf install -y make gcc-c++ clang clang-tools-extra cmake3 git rpm-build fuse3-devel
+      uses: ./.github/actions/install-dependencies
+      with:
+        clang-tools: true
     - name: make format-check
       run: make format
     - name: make tidy-check
