@@ -41,7 +41,10 @@ public:
 	Holder(Holder&& other) = default;
 	Holder& operator=(Holder&& other) = default;
 
-	/** @brief Add a telemetry node. */
+	/**
+	 * @brief Add a telemetry node.
+	 * @param node Node to add
+	 */
 	void add(const std::shared_ptr<Node>& node);
 
 	/** @brief Disable callbacks of all held files. */

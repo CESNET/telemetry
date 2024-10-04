@@ -53,7 +53,7 @@ TEST(AggAvgTest, convertToAverage)
 	// Test converting Scalar to average
 	{
 		AggContent aggContent = Scalar {5.0};
-		ResultType result = convertToAverage(aggContent, 10);
+		AggMethodSum::ResultType result = convertToAverage(aggContent, 10);
 		EXPECT_TRUE(std::holds_alternative<Scalar>(result));
 		const auto& scalar = std::get<Scalar>(result);
 		EXPECT_EQ(0.5, std::get<double>(scalar));
@@ -62,7 +62,7 @@ TEST(AggAvgTest, convertToAverage)
 	// Test converting ScalarWithUnit to average
 	{
 		AggContent aggContent = ScalarWithUnit {5.0, "unit"};
-		ResultType result = convertToAverage(aggContent, 2);
+		AggMethodSum::ResultType result = convertToAverage(aggContent, 2);
 		EXPECT_TRUE(std::holds_alternative<ScalarWithUnit>(result));
 		const auto& [scalar, unit] = std::get<ScalarWithUnit>(result);
 		EXPECT_EQ(2.5, std::get<double>(scalar));

@@ -74,7 +74,7 @@ static ScalarWithUnit aggregateScalarWithUnit(std::vector<AggContent>& values)
 	return {result, unit};
 }
 
-static ResultType aggregateGatheredValues(std::vector<AggContent>& values)
+static AggMethodSum::ResultType aggregateGatheredValues(std::vector<AggContent>& values)
 {
 	if (std::holds_alternative<Scalar>(values.front())) {
 		return aggregateScalar(values);
@@ -87,7 +87,7 @@ static ResultType aggregateGatheredValues(std::vector<AggContent>& values)
 	throw TelemetryException("Unexpected variant alternative.");
 }
 
-static Content createDictContent(const std::string& dictKey, const ResultType& result)
+static Content createDictContent(const std::string& dictKey, const AggMethodSum::ResultType& result)
 {
 	Dict dict;
 
@@ -97,7 +97,7 @@ static Content createDictContent(const std::string& dictKey, const ResultType& r
 	return dict;
 }
 
-Content AggMethodSum::createContent(const ResultType& result)
+Content AggMethodSum::createContent(const AggMethodSum::ResultType& result)
 {
 	const auto dictResultName = getDictResultName();
 	if (!dictResultName.empty()) {

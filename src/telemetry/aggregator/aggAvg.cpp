@@ -29,7 +29,7 @@ static void makeAverage(Scalar& result, size_t count)
 	}
 }
 
-static ResultType convertToAverage(AggContent& aggContent, size_t count)
+static AggMethodSum::ResultType convertToAverage(AggContent& aggContent, size_t count)
 {
 	if (std::holds_alternative<Scalar>(aggContent)) {
 		makeAverage(std::get<Scalar>(aggContent), count);
@@ -50,7 +50,7 @@ Content AggMethodAvg::aggregate(const std::vector<Content>& contents)
 	const Content aggregatedSum = AggMethodSum::aggregate(contents);
 	const bool useDictResultNameAsKey = true;
 	AggContent aggContent = getAggContent(aggregatedSum, useDictResultNameAsKey);
-	const ResultType result = convertToAverage(aggContent, contents.size());
+	const AggMethodSum::ResultType result = convertToAverage(aggContent, contents.size());
 	return createContent(result);
 }
 

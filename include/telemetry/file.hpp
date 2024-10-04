@@ -25,8 +25,8 @@ class Directory;
  * Asynchronously called function implemented by a file. All functions are optional.
  */
 struct FileOps {
-	std::function<Content()> read = nullptr;
-	std::function<void()> clear = nullptr;
+	std::function<Content()> read = nullptr; ///< Read operation
+	std::function<void()> clear = nullptr; ///< Clear operation
 };
 
 /**
@@ -53,9 +53,15 @@ public:
 	File(File&& other) = delete;
 	File& operator=(File&& other) = delete;
 
-	/** Test whether the file supports read operation. */
+	/**
+	 * @brief Test whether the file supports read operation.
+	 * @return True if the file supports read operation.
+	 */
 	bool hasRead();
-	/** Test whether the file supports clear operation. */
+	/**
+	 * @brief Test whether the file supports clear operation.
+	 * @return True if the file supports clear operation.
+	 */
 	bool hasClear();
 
 	/**

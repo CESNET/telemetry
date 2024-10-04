@@ -16,8 +16,6 @@
 
 namespace telemetry {
 
-using ResultType = std::variant<Scalar, ScalarWithUnit>;
-
 /**
  * @brief Implementation of the SUM aggregation method.
  */
@@ -31,6 +29,11 @@ public:
 	 * @throws TelemetryException if the aggregation encounters an error.
 	 */
 	Content aggregate(const std::vector<Content>& contents) override;
+
+	/**
+	 * @brief Get the result type of the aggregation
+	 */
+	using ResultType = std::variant<Scalar, ScalarWithUnit>;
 
 protected:
 	Content createContent(const ResultType& result);

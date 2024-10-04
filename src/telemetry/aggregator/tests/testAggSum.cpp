@@ -107,7 +107,7 @@ TEST(AggSumTest, TestAggregateScalarWithUnit)
  */
 TEST(AggSumTest, TestCreateDictContent)
 {
-	ResultType result = Scalar {uint64_t(30)};
+	AggMethodSum::ResultType result = Scalar {uint64_t(30)};
 	Content content = createDictContent("sum", result);
 
 	EXPECT_TRUE(std::holds_alternative<Dict>(content));
