@@ -21,10 +21,12 @@ namespace telemetry {
  * Supported methods and types:
  * - @p AVG: Scalar(WithUnit) value, [uint64_t, int64_t, double] -> result double
  * - @p SUM: Scalar(WithUnit) value, [uint64_t, int64_t, double]
+ * - @p MIN: Scalar(WithUnit) value, [uint64_t, int64_t, double]
+ * - @p MAX: Scalar(WithUnit) value, [uint64_t, int64_t, double]
  * - @p JOIN: Scalar value (array included), [bool, uint64_t, int64_t, double, string,
  * std::monostate()]
  */
-enum class AggMethodType { AVG, SUM, JOIN };
+enum class AggMethodType { AVG, SUM, MIN, MAX, JOIN };
 
 /**
  * @brief Structure representing an aggregation operation

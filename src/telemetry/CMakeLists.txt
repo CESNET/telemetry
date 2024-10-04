@@ -9,6 +9,7 @@ list(APPEND TELEMETRY_SOURCE_FILES
 	aggregator/aggMethod.cpp
 	aggregator/aggSum.cpp
 	aggregator/aggAvg.cpp
+	aggregator/aggMinMax.cpp
 	aggregator/aggJoin.cpp
 	aggregator/aggMethodFactory.cpp
 )
