@@ -29,6 +29,12 @@ telemetry data in your program.
 %install
 %cmake_install
 
+%post
+# Add a line to /etc/fuse.conf if it doesn't already exist
+if ! grep -q "^user_allow_other" /etc/fuse.conf; then
+    echo "user_allow_other" >> /etc/fuse.conf
+fi
+
 %files
 %license LICENSE
 %{_libdir}/libtelemetry.so
