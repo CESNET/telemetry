@@ -16,6 +16,7 @@ option(TELEMETRY_PACKAGE_BUILDER    "Enable RPM package builder (make rpm)" ON)
 option(TELEMETRY_INSTALL_TARGETS    "Generate the install target" ON)
 option(TELEMETRY_ENABLE_TESTS       "Build Unit tests (make test)" OFF)
 option(TELEMETRY_ENABLE_DOC_DOXYGEN "Enable build of code documentation" OFF)
+option(TELEMETRY_BUILD_EXAMPLES     "Build included examples files (make examples)" OFF)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -34,6 +35,10 @@ endif()
 
 add_subdirectory(src)
 add_subdirectory(doc)
+
+if (TELEMETRY_BUILD_EXAMPLES)
+	add_subdirectory(examples)
+endif()
 
 if (TELEMETRY_PACKAGE_BUILDER)
 	add_subdirectory(pkg)

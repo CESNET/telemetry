@@ -16,6 +16,7 @@ jobs:
           output_file: 'cppcheck_report.txt'
           enable: warning,performance,portability,style,information
           other_options: --error-exitcode=1 --library=googletest
+          exclude_check: ./examples/
       - name: Print cppcheck_report.txt
         if: failure()
         run: cat cppcheck_report.txt
