@@ -20,9 +20,11 @@ endif
 
 SRC_DIR = "$(shell pwd)/src"
 INC_DIR = "$(shell pwd)/include"
+EXAMPLES_DIR = "$(shell pwd)/examples"
 
-HEADE_FILTER = "$(SRC_DIR)|$(INC_DIR)"
-SOURCE_DIR = "$(SRC_DIR)" "$(INC_DIR)"
+HEADE_FILTER = "$(SRC_DIR)|$(INC_DIR)|$(EXAMPLE_DIR)"
+SOURCE_DIR = "$(SRC_DIR)" "$(INC_DIR)" "$(EXAMPLES_DIR)"
+CPP_CHECK_SOURCE_DIR = "$(SRC_DIR)" "$(INC_DIR)"
 SOURCE_REGEX = '.*\.\(cpp\|hpp\)'
 
 CPPCHECK_FLAGS = \
@@ -64,7 +66,7 @@ tidy-fix: all
 
 .PHONY: cppcheck
 cppcheck: build/Makefile
-	@$(CPPCHECK) $(CPPCHECK_FLAGS) --enable=$(CPPCHECK_CHECKS) $(SOURCE_DIR)
+	@$(CPPCHECK) $(CPPCHECK_FLAGS) --enable=$(CPPCHECK_CHECKS) $(CPP_CHECK_SOURCE_DIR)
 
 .PHONY: test
 test: build
@@ -75,3 +77,7 @@ test: build
 doxygen: build
 	@cd build && $(CMAKE) $(CMAKE_ARGS) -DTELEMETRY_ENABLE_DOC_DOXYGEN=ON ..
 	@$(MAKE) --no-print-directory -C build $@
+
+examples: build
+	@cd build && $(CMAKE) $(CMAKE_ARGS) -DTELEMETRY_BUILD_EXAMPLES=ON ..
+	@$(MAKE) --no-print-directory -C build
