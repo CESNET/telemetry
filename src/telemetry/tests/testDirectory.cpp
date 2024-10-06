@@ -327,4 +327,32 @@ TEST(TelemetryDirectory, getEntryRemoved)
 	EXPECT_EQ(nullptr, root->getEntry("app"));
 }
 
+/**
+ * @test Test creating telemetry symlink.
+ */
+TEST(TelemetryDirectory, addSymlink)
+{
+	auto root = Directory::create();
+
+	auto info = root->addDir("info");
+	auto symlink = root->addSymlink("link", info);
+
+	EXPECT_EQ("link", symlink->getName());
+	EXPECT_EQ("/link", symlink->getFullPath());
+	EXPECT_EQ(info, symlink->getTarget());
+
+	EXPECT_THROW((void) root->addSymlink("link", info), TelemetryException);
+	EXPECT_THROW((void) root->addSymlink("info", info), TelemetryException);
+
+	auto symlinkToSymlink = root->addSymlink("linkToLink", symlink);
+
+	EXPECT_EQ("linkToLink", symlinkToSymlink->getName());
+	EXPECT_EQ("/linkToLink", symlinkToSymlink->getFullPath());
+	EXPECT_EQ(symlink, symlinkToSymlink->getTarget());
+
+	auto targetOfSymlinkToSymlink
+		= std::dynamic_pointer_cast<Symlink>(symlinkToSymlink->getTarget())->getTarget();
+	EXPECT_EQ(info, targetOfSymlinkToSymlink);
+}
+
 } // namespace telemetry
