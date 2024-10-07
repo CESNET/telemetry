@@ -22,7 +22,7 @@ SRC_DIR = "$(shell pwd)/src"
 INC_DIR = "$(shell pwd)/include"
 EXAMPLES_DIR = "$(shell pwd)/examples"
 
-HEADE_FILTER = "$(SRC_DIR)|$(INC_DIR)|$(EXAMPLE_DIR)"
+HEADER_FILTER = "$(SRC_DIR)|$(INC_DIR)|$(EXAMPLES_DIR)"
 SOURCE_DIR = "$(SRC_DIR)" "$(INC_DIR)" "$(EXAMPLES_DIR)"
 CPP_CHECK_SOURCE_DIR = "$(SRC_DIR)" "$(INC_DIR)"
 SOURCE_REGEX = '.*\.\(cpp\|hpp\)'
@@ -58,11 +58,11 @@ format-fix:
 
 .PHONY: tidy
 tidy: all
-	$(RUN_CLANG_TIDY) -p build -quiet -j $(shell nproc) -header-filter=$(HEADE_FILTER) $(SOURCE_DIR)
+	$(RUN_CLANG_TIDY) -p build -quiet -j $(shell nproc) -header-filter=$(HEADER_FILTER) $(SOURCE_DIR)
 
 .PHONY: tidy-fix
 tidy-fix: all
-	$(RUN_CLANG_TIDY) -p build -quiet -fix -j $(shell nproc) -header-filter=$(HEADE_FILTER) $(SOURCE_DIR)
+	$(RUN_CLANG_TIDY) -p build -quiet -fix -j $(shell nproc) -header-filter=$(HEADER_FILTER) $(SOURCE_DIR)
 
 .PHONY: cppcheck
 cppcheck: build/Makefile
