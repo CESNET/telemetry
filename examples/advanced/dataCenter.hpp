@@ -40,7 +40,15 @@ public:
 	 * @param location The physical location of the data center.
 	 * @param dataCenterDir Shared pointer to the telemetry directory for this data center.
 	 */
-	DataCenter(std::string location, std::shared_ptr<telemetry::Directory>& dataCenterDir);
+	DataCenter(
+		std::string location,
+		uint64_t dataCenterId,
+		std::shared_ptr<telemetry::Directory>& dataCenterDir);
+
+	DataCenter(const DataCenter& other) = delete;
+	DataCenter& operator=(const DataCenter& other) = delete;
+	DataCenter(DataCenter&& other) = default;
+	DataCenter& operator=(DataCenter&& other) = default;
 
 	/**
 	 * @brief Adds a server to the data center.
@@ -58,6 +66,7 @@ private:
 	std::shared_ptr<telemetry::Directory>
 		m_rootDir; ///< Pointer to the root data center telemetry directory.
 	std::string m_location; ///< The location of the data center.
+	uint64_t m_dataCenterId; ///< The unique identifier of the data center.
 	telemetry::Holder m_holder; ///< Holder for managing telemetry files.
 	std::vector<Server> m_servers; ///< Vector to store added servers.
 };

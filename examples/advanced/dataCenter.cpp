@@ -43,10 +43,15 @@ static std::shared_ptr<telemetry::AggregatedFile> createSummaryFile(
 	return dir->addAggFile(filename, filePattern, aggOps, patternRootDir);
 }
 
-DataCenter::DataCenter(std::string location, std::shared_ptr<telemetry::Directory>& dataCenterDir)
+DataCenter::DataCenter(
+	std::string location,
+	uint64_t dataCenterId,
+	std::shared_ptr<telemetry::Directory>& dataCenterDir)
 	: m_rootDir(dataCenterDir)
 	, m_location(std::move(location))
+	, m_dataCenterId(dataCenterId)
 {
+	(void) m_dataCenterId;
 	setupTelemetry(dataCenterDir);
 }
 
