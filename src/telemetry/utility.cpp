@@ -11,6 +11,7 @@
 #include <sstream>
 #include <telemetry/directory.hpp>
 #include <telemetry/file.hpp>
+#include <telemetry/symlink.hpp>
 
 namespace telemetry::utils {
 
@@ -70,6 +71,11 @@ bool isFile(const std::shared_ptr<Node>& node) noexcept
 bool isDirectory(const std::shared_ptr<Node>& node) noexcept
 {
 	return std::dynamic_pointer_cast<Directory>(node) != nullptr;
+}
+
+bool isSymlink(const std::shared_ptr<Node>& node) noexcept
+{
+	return std::dynamic_pointer_cast<Symlink>(node) != nullptr;
 }
 
 bool isRootDirectory(const std::string& path) noexcept
