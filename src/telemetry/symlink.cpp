@@ -29,3 +29,7 @@ Symlink::Symlink(
 }
 
 } // namespace telemetry
+
+#ifdef TELEMETRY_ENABLE_TESTS
+#include "tests/testSymlink.cpp"
+#endif
