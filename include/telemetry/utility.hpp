@@ -48,6 +48,13 @@ bool isFile(const std::shared_ptr<Node>& node) noexcept;
 bool isDirectory(const std::shared_ptr<Node>& node) noexcept;
 
 /**
+ * @brief Check if a node represents a symlink.
+ * @param node The node to check.
+ * @return True if the node is a symlink, false otherwise.
+ */
+bool isSymlink(const std::shared_ptr<Node>& node) noexcept;
+
+/**
  * @brief Check if a given path is the root directory.
  * @param path The path to check.
  * @return True if the path is the root directory, false otherwise.

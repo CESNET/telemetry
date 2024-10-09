@@ -1,6 +1,7 @@
 /**
  * @file
  * @author Lukas Hutak <hutak@cesnet.cz>
+ * @author Pavel Siska <siska@cesnet.cz>
  * @brief Telemetry directory
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -96,6 +97,27 @@ std::shared_ptr<AggregatedFile> Directory::addAggFile(
 
 	addEntryLocked(newFile);
 	return newFile;
+}
+
+std::shared_ptr<Symlink>
+Directory::addSymlink(std::string_view name, const std::shared_ptr<Node>& target)
+{
+	const std::lock_guard lock(getMutex());
+	const std::shared_ptr<Node> entry = getEntryLocked(name);
+
+	if (entry != nullptr) {
+		throwEntryAlreadyExists(name);
+	}
+
+	if (target == shared_from_this()) {
+		throw TelemetryException(
+			"A symlink '" + std::string(name) + " cannot point to itself - " + getFullPath());
+	}
+
+	auto newSymlink = std::shared_ptr<Symlink>(new Symlink(shared_from_this(), name, target));
+
+	addEntryLocked(newSymlink);
+	return newSymlink;
 }
 
 std::vector<std::string> Directory::listEntries()
