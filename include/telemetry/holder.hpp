@@ -38,7 +38,17 @@ public:
 
 	Holder(const Holder& other) = delete;
 	Holder& operator=(const Holder& other) = delete;
-	Holder(Holder&& other) = default;
+	/**
+	 * @brief Move constructor
+	 * @param other Other holder
+	 */
+	Holder(Holder&& other) = delete;
+
+	/**
+	 * @brief Move assignment
+	 * @param other Other holder
+	 * @return Reference to this holder
+	 */
 	Holder& operator=(Holder&& other) = default;
 
 	/**
