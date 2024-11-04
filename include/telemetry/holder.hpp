@@ -42,7 +42,7 @@ public:
 	 * @brief Move constructor
 	 * @param other Other holder
 	 */
-	Holder(Holder&& other) = delete;
+	Holder(Holder&& other) = default;
 
 	/**
 	 * @brief Move assignment
