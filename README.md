@@ -104,16 +104,17 @@ $ cat /tmp/telemetry/*
 ## Advanced Example
 
 The advanced example demonstrates a telemetry data structure that organizes and stores metrics
-from multiple servers located in different data centers.
+from multiple servers located in different data centers, utilizing symbolic links for easier
+access by location and ID.
 
 ### Advanced Example Directory Structure
 After running the advanced example, the resulting directory structure is as follows:
 
 ```bash
-$ tree /tmp/telemetry
-/tmp/telemetry
+$ tree /tmp/telemetry/
+tmp/telemetry/
 └── data_centers
-    ├── new_york
+    ├── 0-prague
     │   ├── server_count
     │   ├── servers
     │   │   ├── server_0
@@ -124,7 +125,7 @@ $ tree /tmp/telemetry
     │   │       └── stats
     │   └── summary
     │       └── summary_stats
-    ├── prague
+    ├── 1-new_york
     │   ├── server_count
     │   ├── servers
     │   │   ├── server_0
@@ -135,17 +136,25 @@ $ tree /tmp/telemetry
     │   │       └── stats
     │   └── summary
     │       └── summary_stats
-    └── tokyo
-        ├── server_count
-        ├── servers
-        │   ├── server_0
-        │   │   └── stats
-        │   ├── server_1
-        │   │   └── stats
-        │   └── server_2
-        │       └── stats
-        └── summary
-            └── summary_stats
+    ├── 2-tokyo
+    │   ├── server_count
+    │   ├── servers
+    │   │   ├── server_0
+    │   │   │   └── stats
+    │   │   ├── server_1
+    │   │   │   └── stats
+    │   │   └── server_2
+    │   │       └── stats
+    │   └── summary
+    │       └── summary_stats
+    ├── by-id
+    │   ├── 0 -> ../0-prague
+    │   ├── 1 -> ../1-new_york
+    │   └── 2 -> ../2-tokyo
+    └── by-location
+        ├── new_york -> ../1-new_york
+        ├── prague -> ../0-prague
+        └── tokyo -> ../2-tokyo
 ```
 
 ### Example Telemetry Output
@@ -153,7 +162,7 @@ Telemetry metrics are stored in files such as stats, which contain real-time dat
 Below is an example of the contents of a stats file for a specific server:
 
 ```bash
-$ cat /tmp/telemetry/data_centers/prague/servers/server_0/stats
+$ cat /tmp/telemetry/data_centers/0-prague/servers/server_0/stats
 cpu_usage:    74.28 (%)
 disk_usage:   13.48 (%)
 latency:      170.20 (ms)
@@ -164,7 +173,7 @@ timestamp:    2024-10-03 15:18:41
 You can also view summary statistics for a data center by reading the summary_stats file:
 
 ```bash
-$ cat /tmp/telemetry/data_centers/prague/summary/summary_stats
+$ cat /tmp/telemetry/data_centers/by-location/prague/summary/summary_stats
 cpu_usage [avg]:    44.20 (%)
 disk_usage [avg]:   35.78 (%)
 latency [avg]:      121.82 (ms)

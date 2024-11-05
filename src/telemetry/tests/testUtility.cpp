@@ -86,6 +86,22 @@ TEST(TelemetryUtility, getNodeFromPath)
 /**
  * @test Test checking if the node is a file
  */
+TEST(TelemetryUtility, isSymlink)
+{
+	auto root = Directory::create();
+	auto dir = root->addDir("dir");
+	auto file = dir->addFile("file", {});
+	auto symlink = root->addSymlink("symlink", file);
+
+	EXPECT_FALSE(utils::isSymlink(dir));
+	EXPECT_FALSE(utils::isSymlink(root));
+
+	EXPECT_TRUE(utils::isSymlink(symlink));
+}
+
+/**
+ * @test Test checking if the node is a file
+ */
 TEST(TelemetryUtility, isFile)
 {
 	auto root = Directory::create();

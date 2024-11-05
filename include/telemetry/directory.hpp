@@ -1,6 +1,7 @@
 /**
  * @file
  * @author Lukas Hutak <hutak@cesnet.cz>
+ * @author Pavel Siska <siska@cesnet.cz>
  * @brief Telemetry directory
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -11,6 +12,7 @@
 #include "aggFile.hpp"
 #include "file.hpp"
 #include "node.hpp"
+#include "symlink.hpp"
 
 #include <map>
 #include <memory>
@@ -58,6 +60,27 @@ public:
 	 * @throw TelemetryException if there is already a file with the same name.
 	 */
 	[[nodiscard]] std::shared_ptr<Directory> addDir(std::string_view name);
+
+	/**
+	 * @brief Add a symbolic link.
+	 *
+	 * This function creates a symbolic link with the specified @p name that points to the
+	 * target node specified by @p target. If a node with the same name already exists an exception
+	 * will be thrown.
+	 *
+	 * @param name Name of the symbolic link to be created.
+	 * @param target A shared pointer to the target node (file or directory) that the symlink will
+	 * point to.
+	 * @return A shared pointer to the newly created symbolic link.
+	 *
+	 * @note The directory only holds a weak pointer to the symbolic link, so if the returned
+	 * pointer ceases to exist, the entry will be removed, and it can be replaced with a new one.
+	 *
+	 * @throw TelemetryException If a node with the same name already exists in the
+	 * directory.
+	 */
+	[[nodiscard]] std::shared_ptr<Symlink>
+	addSymlink(std::string_view name, const std::shared_ptr<Node>& target);
 
 	/**
 	 * @brief Add multiple subdirectories with the given @p name.

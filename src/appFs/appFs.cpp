@@ -43,6 +43,15 @@ static off_t getMaxFileSize(const std::shared_ptr<File>& file)
 	return static_cast<off_t>(blockSizeMultiplier * blockSize);
 }
 
+static void setSymlinkAttr(struct stat* stbuf)
+{
+	const mode_t symlinkMode = 0777;
+	stbuf->st_mode = S_IFLNK | symlinkMode;
+	stbuf->st_nlink = 1;
+	stbuf->st_size = BUFSIZ;
+	stbuf->st_mtime = time(nullptr);
+}
+
 static void setFileAttr(const std::shared_ptr<File>& file, struct stat* stbuf)
 {
 	stbuf->st_mode = S_IFREG;
@@ -83,6 +92,11 @@ static int fuseGetAttr(const char* path, struct stat* stbuf, struct fuse_file_in
 
 	const std::shared_ptr<Directory> rootDirectory = getRootDirectory();
 	auto node = utils::getNodeFromPath(rootDirectory, path);
+
+	if (utils::isSymlink(node)) {
+		setSymlinkAttr(stbuf);
+		return 0;
+	}
 
 	if (utils::isFile(node)) {
 		setFileAttr(std::dynamic_pointer_cast<File>(node), stbuf);
@@ -308,6 +322,34 @@ static int writeCallback(
 	}
 }
 
+static int readlinkCallback(const char* path, char* buffer, size_t size)
+{
+	auto node = utils::getNodeFromPath(getRootDirectory(), path);
+
+	if (!utils::isSymlink(node)) {
+		return -ENOENT;
+	}
+
+	const auto targetNode = std::dynamic_pointer_cast<Symlink>(node)->getTarget();
+	if (targetNode == nullptr) {
+		return -ENOENT;
+	}
+
+	const std::filesystem::path targetPath = targetNode->getFullPath();
+
+	const std::string relativeTargetPath
+		= std::filesystem::relative(targetPath, std::filesystem::path(path).parent_path()).string();
+
+	if (size < relativeTargetPath.size() + 1) {
+		return -ENAMETOOLONG;
+	}
+
+	std::memcpy(buffer, relativeTargetPath.c_str(), relativeTargetPath.size());
+	buffer[relativeTargetPath.size()] = '\0';
+
+	return 0;
+}
+
 static void setFuseOperations(struct fuse_operations* fuseOps)
 {
 	fuseOps->getattr = getAttrCallback;
@@ -316,6 +358,7 @@ static void setFuseOperations(struct fuse_operations* fuseOps)
 	fuseOps->read = readCallback;
 	fuseOps->write = writeCallback;
 	fuseOps->release = releaseCallback;
+	fuseOps->readlink = readlinkCallback;
 }
 
 class AppFsFuseBuffer {

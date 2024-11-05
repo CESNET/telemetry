@@ -46,34 +46,54 @@ void signalHandler(int signum)
 /**
  * @brief Creates a DataCenter object for a given location.
  *
- * This function initializes a DataCenter for the specified location and associates it with a
+ * This function initializes a DataCenter for the specified location, id and associates it with a
  * telemetry directory.
  *
  * @param location The location of the data center.
+ * @param dataCenterId The unique identifier of the data center.
  * @param dataCentersDir Shared pointer to the directory where the data center will be created.
- * @return A DataCenter object initialized for the specified location.
+ * @param holder The telemetry holder for managing telemetry files.
+ * @return Initialized DataCenter object.
  */
-DataCenter
-createDataCenter(const std::string& location, std::shared_ptr<telemetry::Directory>& dataCentersDir)
+DataCenter createDataCenter(
+	const std::string& location,
+	uint64_t dataCenterId,
+	std::shared_ptr<telemetry::Directory>& dataCentersDir,
+	telemetry::Holder& holder)
 {
-	auto dataCenterDir = dataCentersDir->addDir(location);
-	return {location, dataCenterDir};
+	auto dataCenterDir = dataCentersDir->addDir(std::to_string(dataCenterId) + "-" + location);
+	auto symlinkByLocation
+		= dataCentersDir->addDir("by-location")->addSymlink(location, dataCenterDir);
+	auto symlinkById
+		= dataCentersDir->addDir("by-id")->addSymlink(std::to_string(dataCenterId), dataCenterDir);
+	holder.add(symlinkByLocation);
+	holder.add(symlinkById);
+
+	return {location, dataCenterId, dataCenterDir};
 }
 
 /**
  * @brief Creates multiple DataCenter objects for predefined locations.
  *
- * This function initializes a set of data centers, each containing a predefined number of servers.
+ * This function initializes a set of data centers, each containing a predefined number of
+ * servers.
  *
  * @param dataCentersDir Shared pointer to the directory where the data centers will be created.
+ * @param holder The telemetry holder for managing telemetry files.
  * @return A vector of initialized DataCenter objects.
  */
-std::vector<DataCenter> createDataCenters(std::shared_ptr<telemetry::Directory>& dataCentersDir)
+std::vector<DataCenter>
+createDataCenters(std::shared_ptr<telemetry::Directory>& dataCentersDir, telemetry::Holder& holder)
 {
+	uint64_t dataCenterId = 0;
 	std::vector<DataCenter> dataCenters;
-	dataCenters.emplace_back(createDataCenter("prague", dataCentersDir));
-	dataCenters.emplace_back(createDataCenter("new_york", dataCentersDir));
-	dataCenters.emplace_back(createDataCenter("tokyo", dataCentersDir));
+
+	std::array<std::string, 3> locations = {"prague", "new_york", "tokyo"};
+
+	for (const auto& location : locations) {
+		dataCenters.emplace_back(
+			createDataCenter(location, dataCenterId++, dataCentersDir, holder));
+	}
 
 	const std::size_t serversPerDatacenter = 3;
 
@@ -105,8 +125,15 @@ int main(int argc, char** argv)
 		// create telemetry root directory
 		telemetryRootDirectory = telemetry::Directory::create();
 
+		/**
+		 * The telemetry holder for managing telemetry files. It ensures that the files are
+		 * not prematurely destroyed. Because the telemetry directory holds weak pointers to the
+		 * files, the holder ensures that the files are not deleted until the holder is destroyed.
+		 */
+		telemetry::Holder holder;
+
 		auto dataCentersDir = telemetryRootDirectory->addDir("data_centers");
-		auto dataCenters = createDataCenters(dataCentersDir);
+		auto dataCenters = createDataCenters(dataCentersDir, holder);
 
 		const bool tryToUnmountOnStart = true;
 		const bool createMountPoint = true;

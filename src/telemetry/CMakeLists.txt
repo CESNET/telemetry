@@ -6,6 +6,7 @@ list(APPEND TELEMETRY_SOURCE_FILES
 	holder.cpp
 	utility.cpp
 	aggFile.cpp
+	symlink.cpp
 	aggregator/aggMethod.cpp
 	aggregator/aggSum.cpp
 	aggregator/aggAvg.cpp
