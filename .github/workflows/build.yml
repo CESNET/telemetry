@@ -24,6 +24,8 @@ jobs:
       run: make
     - name: make rpm
       run: make rpm
+    - name: make examples
+      run: make examples
     - name: make install
       run: make install
     - name: extract artifact name
