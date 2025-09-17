@@ -12,7 +12,7 @@ include(cmake/installation.cmake)
 include(cmake/dependencies.cmake)
 
 option(TELEMETRY_BUILD_SHARED       "Build shared library" ON)
-option(TELEMETRY_PACKAGE_BUILDER    "Enable RPM package builder (make rpm)" ON)
+option(TELEMETRY_PACKAGE_BUILDER    "Enable RPM package builder (make rpm)" OFF)
 option(TELEMETRY_INSTALL_TARGETS    "Generate the install target" ON)
 option(TELEMETRY_ENABLE_TESTS       "Build Unit tests (make test)" OFF)
 option(TELEMETRY_ENABLE_DOC_DOXYGEN "Enable build of code documentation" OFF)
@@ -43,5 +43,3 @@ endif()
 if (TELEMETRY_PACKAGE_BUILDER)
 	add_subdirectory(pkg)
 endif()
-
-

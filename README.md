@@ -50,6 +50,8 @@ If you prefer to create an RPM package for installation:
 ```bash
 $ git clone https://github.com/CESNET/telemetry.git
 $ cd telemetry
+$ mkdir build && cd build
+$ cmake .. -DTELEMETRY_PACKAGE_BUILDER=ON
 $ make rpm
 ```
 
