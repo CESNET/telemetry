@@ -38,7 +38,7 @@ static off_t getMaxFileSize(const std::shared_ptr<File>& file)
 		static_cast<double>(blockSize) * requiredBlockEmptyCapacityMultiplier);
 
 	const size_t contentSize = fileContentToString(file).size();
-	const size_t blockSizeMultiplier = (contentSize + requiredCapacity) / blockSize + 1;
+	const size_t blockSizeMultiplier = ((contentSize + requiredCapacity) / blockSize) + 1;
 
 	return static_cast<off_t>(blockSizeMultiplier * blockSize);
 }
@@ -79,7 +79,7 @@ static void setDirectoryAttr(struct stat* stbuf)
 	stbuf->st_mtime = time(nullptr);
 }
 
-std::shared_ptr<Directory> getRootDirectory()
+static std::shared_ptr<Directory> getRootDirectory()
 {
 	return *reinterpret_cast<std::shared_ptr<Directory>*>(fuse_get_context()->private_data);
 }

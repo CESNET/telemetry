@@ -26,7 +26,7 @@ namespace telemetry {
  * - @p JOIN: Scalar value (array included), [bool, uint64_t, int64_t, double, string,
  * std::monostate()]
  */
-enum class AggMethodType { AVG, SUM, MIN, MAX, JOIN };
+enum class AggMethodType : uint8_t { AVG, SUM, MIN, MAX, JOIN };
 
 /**
  * @brief Structure representing an aggregation operation
