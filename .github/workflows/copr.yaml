@@ -24,7 +24,9 @@ jobs:
     - name: Mark github workspace as safe
       run: git config --system --add safe.directory $PWD
     - name: make rpm
-      run: make rpm
+      run: |
+        cmake -B build -DTELEMETRY_PACKAGE_BUILDER=ON 
+        make rpm
     - name: Create copr config
       run: |
         mkdir ~/.config
