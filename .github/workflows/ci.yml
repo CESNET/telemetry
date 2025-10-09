@@ -16,7 +16,7 @@ jobs:
         run: |
           osArray=()
           osArray+=("rockylinux:9")
-          osArray+=("oraclelinux:8")
+          osArray+=("oraclelinux:10")
           osArray+=("oraclelinux:9")
           osArray+=("fedora:38")
           osArray=$(jq --compact-output --null-input '$ARGS.positional' --args -- "${osArray[@]}")
