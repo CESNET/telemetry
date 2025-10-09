@@ -13,7 +13,9 @@
 #include <telemetry/file.hpp>
 #include <telemetry/utility.hpp>
 
+#include <algorithm>
 #include <iomanip>
+#include <ranges>
 #include <regex>
 
 namespace telemetry {
@@ -88,15 +90,13 @@ static void mergeContent(Content& content, const Content& newContent)
 
 static void validateAggOperations(const std::vector<AggOperation>& ops)
 {
-	const bool hasDictFieldName
-		= std::any_of(ops.begin(), ops.end(), [](const AggOperation& aggOp) {
-			  return !aggOp.dictFieldName.empty();
-		  });
+	const bool hasDictFieldName = std::ranges::any_of(ops, [](const AggOperation& aggOp) {
+		return !aggOp.dictFieldName.empty();
+	});
 
-	const bool hasNoDictFieldName
-		= std::any_of(ops.begin(), ops.end(), [](const AggOperation& aggOp) {
-			  return aggOp.dictFieldName.empty();
-		  });
+	const bool hasNoDictFieldName = std::ranges::any_of(ops, [](const AggOperation& aggOp) {
+		return aggOp.dictFieldName.empty();
+	});
 
 	if (hasDictFieldName && hasNoDictFieldName) {
 		throw TelemetryException(

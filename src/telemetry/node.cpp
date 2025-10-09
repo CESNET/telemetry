@@ -10,6 +10,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <ranges>
 
 namespace telemetry {
 
@@ -59,7 +60,7 @@ void Node::checkName(std::string_view name)
 		throwTelemetryException("empty name is not allowed");
 	}
 
-	const auto* const pos = std::find_if_not(name.begin(), name.end(), isValidCharacter);
+	const auto* const pos = std::ranges::find_if_not(name, isValidCharacter);
 	if (pos != name.end()) {
 		const std::string err = "prohibited character '" + std::to_string(*pos) + "'";
 		throwTelemetryException(err);
