@@ -18,7 +18,7 @@ option(TELEMETRY_ENABLE_TESTS       "Build Unit tests (make test)" OFF)
 option(TELEMETRY_ENABLE_DOC_DOXYGEN "Enable build of code documentation" OFF)
 option(TELEMETRY_BUILD_EXAMPLES     "Build included examples files (make examples)" OFF)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
