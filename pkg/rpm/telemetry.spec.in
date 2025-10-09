@@ -7,11 +7,17 @@ License:       BSD
 Source0:       %{name}-%{version}.tar.gz
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}
-BuildRequires: gcc-c++ >= 8
 BuildRequires: make
 BuildRequires: git
 BuildRequires: fuse3-devel >= 3.2.1
 BuildRequires: cmake >= 3.12
+
+%if 0%{?rhel} && 0%{?rhel} <= 8
+BuildRequires: gcc-toolset-13
+BuildRequires: gcc-toolset-13-gcc-c++
+%else
+BuildRequires: gcc-c++ >= 11.5
+%endif
 
 Requires: fuse3
 
@@ -23,6 +29,9 @@ telemetry data in your program.
 %autosetup
 
 %build
+%if 0%{?rhel} && 0%{?rhel} <= 8
+source /opt/rh/gcc-toolset-13/enable
+%endif
 %cmake -DCMAKE_BUILD_TYPE=Release
 %cmake_build
 
