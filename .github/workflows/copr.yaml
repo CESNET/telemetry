@@ -8,7 +8,7 @@ on:
 jobs:
   release-package-on-copr:
     runs-on: ubuntu-latest
-    container: oraclelinux:8
+    container: oraclelinux:9
     steps:
     - name: Install git
       run: dnf install -y git
@@ -18,14 +18,15 @@ jobs:
       uses: ./.github/actions/install-dependencies
     - name: Install copr-cli
       run: |
-        dnf install -y dnf-plugins-core epel-release
+        dnf install -y dnf-plugins-core
+        dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
         dnf -y copr enable @CESNET/NEMEA
         dnf install -y copr-cli
     - name: Mark github workspace as safe
       run: git config --system --add safe.directory $PWD
     - name: make rpm
       run: |
-        cmake -B build -DTELEMETRY_PACKAGE_BUILDER=ON 
+        cmake -B build -DTELEMETRY_PACKAGE_BUILDER=ON
         make rpm
     - name: Create copr config
       run: |
