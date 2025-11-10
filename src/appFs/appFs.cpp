@@ -363,11 +363,7 @@ static void setFuseOperations(struct fuse_operations* fuseOps)
 
 class AppFsFuseBuffer {
 public:
-	AppFsFuseBuffer()
-	{
-		m_buffer.mem = nullptr;
-		m_buffer.size = 0;
-	}
+	AppFsFuseBuffer() = default;
 
 	~AppFsFuseBuffer()
 	{
@@ -378,7 +374,7 @@ public:
 	fuse_buf* getBuffer() { return &m_buffer; }
 
 private:
-	fuse_buf m_buffer;
+	fuse_buf m_buffer {};
 };
 
 static void fuseLoop(struct fuse_session* session)
